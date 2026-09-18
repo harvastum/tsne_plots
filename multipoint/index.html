@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Evaluation plots: multipoint</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #fff;
+      --border: #e5e5e5;
+      --text: #111;
+      --muted: #666;
+      --link: #0366d6;
+      --sidebar-w: 320px;
+      --topbar-h: 46px;
+      --handle-w: 8px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden; /* prevent double scrollbars */
+    }
+
+    /* Top bar spans full width */
+    .topbar {
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #f6f8fa; }
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Two-pane app area */
+    .app {
+      height: calc(100vh - var(--topbar-h));
+      display: flex;
+      min-width: 0;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: 220px;
+      max-width: 60vw;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden; /* sidebar scroll stays inside .nav */
+    }
+    #sidebar.collapsed {
+      width: 0 !important;
+      border-right: 0;
+    }
+
+    .sidehdr {
+      padding: 10px 10px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .search {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      outline: none;
+    }
+    .nav {
+      padding: 8px;
+      overflow: auto; /* sidebar internal scroll */
+      flex: 1;
+    }
+    .navlink {
+      display: block;
+      padding: 8px 10px;
+      margin: 2px 0;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .navlink:hover { background: #f2f4f7; }
+
+    /* Drag handle between sidebar and content */
+    #handle {
+      width: var(--handle-w);
+      cursor: col-resize;
+      background: transparent;
+      position: relative;
+      flex: 0 0 var(--handle-w);
+    }
+    #handle::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 2px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.06);
+    }
+    #sidebar.collapsed + #handle {
+      display: none;
+    }
+
+    /* Main content */
+    main {
+      flex: 1;
+      min-width: 0;
+      overflow: auto; /* ONLY main scroll */
+      padding: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin: 0 0 14px 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .cardhdr {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 15px;
+    }
+    .toplink {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .toplink:hover { color: var(--link); }
+    .plot {
+      width: 100%;
+      height: 900px;
+      border: 0;
+    }
+
+    /* Mobile: sidebar overlays content */
+    @media (max-width: 900px) {
+      #sidebar {
+        position: absolute;
+        left: 0;
+        top: var(--topbar-h);
+        height: calc(100vh - var(--topbar-h));
+        z-index: 20;
+        box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      }
+      #handle { display: none; }
+    }
+  </style>
+
+  <style>
+    .global-top-panel { padding: 16px 20px 12px; background: #f7f7f5; border-bottom: 1px solid #e2e2db; }
+    .global-top-panel h1 { margin: 0 0 10px; font-size: 26px; }
+    .global-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .global-tabs .tab { border: 1px solid #d7d7d0; background: #fff; color: #151515; padding: 10px 14px; border-radius: 999px; cursor: pointer; text-decoration: none; font-size: 14px; }
+    .global-tabs .tab.active { background: #151515; color: #fff; }
+  </style>
+
+</head>
+<body>
+  <div class="global-top-panel">
+    <h1>Model Evaluation Report</h1>
+    <div class="global-tabs"><a class="tab" href="../index.html">Summary</a><a class="tab" href="../LHC25i4/index.html">LHC25i4</a><a class="tab" href="../LHC26b13/index.html">LHC26b13</a><a class="tab active" href="../multipoint/index.html">multipoint</a></div>
+  </div>
+
+  <div class="topbar" id="top">
+    <button class="btn" id="toggle">Menu Sidebar</button>
+    <div class="title">Evaluation plots: multipoint</div>
+  </div>
+
+  <div class="app">
+    <aside id="sidebar">
+      <div class="sidehdr">
+        <input class="search" id="q" placeholder="Filter plots..." />
+      </div>
+      <div class="nav" id="nav">
+        <a class="navlink" href="#recall_vs_multiplicity">recall_vs_multiplicity</a>
+        <a class="navlink" href="#recall_vs_invqpt">recall_vs_invqpt</a>
+        <a class="navlink" href="#threshold_vs_recall">threshold_vs_recall</a>
+      </div>
+    </aside>
+
+    <div id="handle" title="Drag to resize"></div>
+
+    <main id="content">
+      <section class="card" id="recall_vs_multiplicity">
+  <div class="cardhdr">
+    <h2>recall_vs_multiplicity</h2>
+    <a class="toplink" href="#top">^ top</a>
+  </div>
+  <iframe class="plot" src="recall_vs_multiplicity.html" loading="lazy"></iframe>
+</section>
+      <section class="card" id="recall_vs_invqpt">
+  <div class="cardhdr">
+    <h2>recall_vs_invqpt</h2>
+    <a class="toplink" href="#top">^ top</a>
+  </div>
+  <iframe class="plot" src="recall_vs_invqpt.html" loading="lazy"></iframe>
+</section>
+      <section class="card" id="threshold_vs_recall">
+  <div class="cardhdr">
+    <h2>threshold_vs_recall</h2>
+    <a class="toplink" href="#top">^ top</a>
+  </div>
+  <iframe class="plot" src="threshold_vs_recall.html" loading="lazy"></iframe>
+</section>
+    </main>
+  </div>
+
+  <script>
+    // Filter links
+    const q = document.getElementById('q');
+    const nav = document.getElementById('nav');
+    q.addEventListener('input', () => {
+      const term = q.value.trim().toLowerCase();
+      for (const a of nav.querySelectorAll('a.navlink')) {
+        a.style.display = a.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+      }
+    });
+
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle');
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+    });
+
+    // Resizable sidebar (drag handle)
+    const handle = document.getElementById('handle');
+    let dragging = false;
+
+    // restore width if stored
+    const storedW = localStorage.getItem('plots_sidebar_w');
+    if (storedW) {
+      document.documentElement.style.setProperty('--sidebar-w', storedW + 'px');
+    }
+
+    handle.addEventListener('mousedown', (e) => {
+      if (sidebar.classList.contains('collapsed')) return;
+      dragging = true;
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const w = Math.max(220, Math.min(window.innerWidth * 0.6, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.userSelect = '';
+      const w = parseInt(getComputedStyle(sidebar).width, 10);
+      if (!isNaN(w) && w > 0) localStorage.setItem('plots_sidebar_w', w);
+    });
+
+    // Touch support
+    handle.addEventListener('touchstart', (e) => {
+      if (sidebar.classList.contains('collapsed')) return;
+      dragging = true;
+      e.preventDefault();
+    }, {passive:false});
+
+    window.addEventListener('touchmove', (e) => {
+      if (!dragging) return;
+      const x = e.touches[0].clientX;
+      const w = Math.max(220, Math.min(window.innerWidth * 0.6, x));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }, {passive:true});
+
+    window.addEventListener('touchend', () => {
+      if (!dragging) return;
+      dragging = false;
+      const w = parseInt(getComputedStyle(sidebar).width, 10);
+      if (!isNaN(w) && w > 0) localStorage.setItem('plots_sidebar_w', w);
+    });
+
+    // Clicking a nav link on mobile collapses the sidebar (nice UX)
+    nav.addEventListener('click', (e) => {
+      const a = e.target.closest('a.navlink');
+      if (!a) return;
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        sidebar.classList.add('collapsed');
+      }
+    });
+  </script>
+</body>
+</html>

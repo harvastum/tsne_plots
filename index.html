@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Model Evaluation Report</title>
+  <style>
+  html, body { height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    margin: 0;
+    background: #f7f7f5;
+    color: #151515;
+  }
+  h1, h2 { margin-top: 0; }
+  .page { min-height: 100vh; width: 100vw; }
+  .top-panel { padding: 16px 20px 12px; background: #f7f7f5; border-bottom: 1px solid #e2e2db; }
+  .content { width: 100vw; max-width: 100vw; padding: 20px 24px 24px; }
+  .tabs { display: flex; gap: 8px; margin: 20px 0 0; flex-wrap: wrap; }
+  .tab { border: 1px solid #d7d7d0; background: #fff; color: #151515; padding: 10px 14px; border-radius: 999px; cursor: pointer; text-decoration: none; }
+  .tab.active { background: #151515; color: #fff; }
+  .summary-table { border-collapse: collapse; width: 100%; background: #fff; margin-bottom: 20px; }
+  .summary-table th, .summary-table td { border: 1px solid #e2e2db; padding: 8px 10px; text-align: left; }
+  .summary-table th { background: #efefe9; }
+  .dataset-summary { margin-bottom: 28px; }
+  .dataset-link { margin: 0 0 12px; }
+  a { color: #0b57d0; }
+  .top-panel { padding: 16px 20px 12px; background: #f7f7f5; border-bottom: 1px solid #e2e2db; }
+  .top-panel h1 { margin: 0 0 10px; font-size: 26px; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tabs .tab { border: 1px solid #d7d7d0; background: #fff; color: #151515; padding: 10px 14px; border-radius: 999px; cursor: pointer; text-decoration: none; font-size: 14px; }
+  .tabs .tab.active { background: #151515; color: #fff; }
+  .summary-table th:first-child,
+.summary-table td:first-child {
+  width: 350px;
+  white-space: normal;
+  word-break: break-word;
+}
+  </style>
+</head>
+<body>
+  <div class="page">
+  <div class="top-panel">
+    <h1>Model Evaluation Report</h1>
+    <div class="tabs"><a class="tab active" href="index.html">Summary</a><a class="tab" href="LHC25i4/index.html">LHC25i4</a><a class="tab" href="LHC26b13/index.html">LHC26b13</a><a class="tab" href="multipoint/index.html">multipoint</a></div>
+  </div>
+  <div class="content">
+    <section id="tab-summary" class="summary-pane">
+    <h2>Summary</h2>
+    <section class="dataset-summary"><h2>LHC25i4</h2><p class="dataset-link"><a href="LHC25i4/index.html">Open plots for LHC25i4</a></p><table class="dataframe summary-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>run_name</th>
+      <th>predictor</th>
+      <th>epoch</th>
+      <th>metric</th>
+      <th>lift_vs_chi2</th>
+      <th>recall@1</th>
+      <th>recall@2</th>
+      <th>recall@3</th>
+      <th>recall@4</th>
+      <th>recall@5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>chi2</td>
+      <td>chi2</td>
+      <td>None</td>
+      <td>-</td>
+      <td>0.0000</td>
+      <td>0.9922</td>
+      <td>0.9992</td>
+      <td>0.9998</td>
+      <td>0.9999</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <td>chi2</td>
+      <td>chi2</td>
+      <td>None</td>
+      <td>-</td>
+      <td>0.0000</td>
+      <td>0.9922</td>
+      <td>0.9992</td>
+      <td>0.9998</td>
+      <td>0.9999</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <td>lhc25i4_mlp</td>
+      <td>mlp</td>
+      <td>580</td>
+      <td>1-p_signal</td>
+      <td>0.0038</td>
+      <td>0.9953</td>
+      <td>0.9997</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <td>lhc25i4_mlp_cov</td>
+      <td>mlp</td>
+      <td>79</td>
+      <td>1-p_signal</td>
+      <td>-0.0007</td>
+      <td>0.9912</td>
+      <td>0.9994</td>
+      <td>0.9999</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <td>lhc25i4_mlp_cov_256</td>
+      <td>mlp</td>
+      <td>426</td>
+      <td>1-p_signal</td>
+      <td>0.0040</td>
+      <td>0.9954</td>
+      <td>0.9998</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <td>lhc25i4_xgboost</td>
+      <td>xgboost</td>
+      <td>-</td>
+      <td>1-p_signal</td>
+      <td>-0.0625</td>
+      <td>0.9396</td>
+      <td>0.9911</td>
+      <td>0.9983</td>
+      <td>0.9997</td>
+      <td>1.0000</td>
+    </tr>
+  </tbody>
+</table></section><section class="dataset-summary"><h2>LHC26b13</h2><p class="dataset-link"><a href="LHC26b13/index.html">Open plots for LHC26b13</a></p><table class="dataframe summary-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>run_name</th>
+      <th>predictor</th>
+      <th>epoch</th>
+      <th>metric</th>
+      <th>lift_vs_chi2</th>
+      <th>recall@1</th>
+      <th>recall@2</th>
+      <th>recall@3</th>
+      <th>recall@4</th>
+      <th>recall@5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>chi2</td>
+      <td>chi2</td>
+      <td>NaN</td>
+      <td>-</td>
+      <td>0.0000</td>
+      <td>0.8063</td>
+      <td>0.9187</td>
+      <td>0.9544</td>
+      <td>0.9704</td>
+      <td>0.9788</td>
+    </tr>
+    <tr>
+      <td>lhc26b13_mlp_256</td>
+      <td>mlp</td>
+      <td>1263.0000</td>
+      <td>1-p_signal</td>
+      <td>0.2283</td>
+      <td>0.8686</td>
+      <td>0.9609</td>
+      <td>0.9837</td>
+      <td>0.9915</td>
+      <td>0.9954</td>
+    </tr>
+    <tr>
+      <td>lhc26b13_mlp_cov</td>
+      <td>mlp</td>
+      <td>1064.0000</td>
+      <td>1-p_signal</td>
+      <td>0.2307</td>
+      <td>0.8687</td>
+      <td>0.9616</td>
+      <td>0.9842</td>
+      <td>0.9919</td>
+      <td>0.9956</td>
+    </tr>
+    <tr>
+      <td>lhc26b13_mlp_cov_256</td>
+      <td>mlp</td>
+      <td>386.0000</td>
+      <td>1-p_signal</td>
+      <td>0.2304</td>
+      <td>0.8693</td>
+      <td>0.9616</td>
+      <td>0.9841</td>
+      <td>0.9917</td>
+      <td>0.9954</td>
+    </tr>
+  </tbody>
+</table></section><section class="dataset-summary"><h2>multipoint</h2><p class="dataset-link"><a href="multipoint/index.html">Open plots for multipoint</a></p><table class="dataframe summary-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>run_name</th>
+      <th>predictor</th>
+      <th>epoch</th>
+      <th>metric</th>
+      <th>lift_vs_chi2</th>
+      <th>recall@1</th>
+      <th>recall@2</th>
+      <th>recall@3</th>
+      <th>recall@4</th>
+      <th>recall@5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>chi2</td>
+      <td>chi2</td>
+      <td>NaN</td>
+      <td>-</td>
+      <td>0.0000</td>
+      <td>0.8077</td>
+      <td>0.9204</td>
+      <td>0.9531</td>
+      <td>0.9688</td>
+      <td>0.9775</td>
+    </tr>
+    <tr>
+      <td>lhc26b13_mlp_cov_multipoint</td>
+      <td>mlp</td>
+      <td>1956.0000</td>
+      <td>1-p_signal</td>
+      <td>0.0351</td>
+      <td>0.7800</td>
+      <td>0.9180</td>
+      <td>0.9540</td>
+      <td>0.9757</td>
+      <td>0.9841</td>
+    </tr>
+    <tr>
+      <td>lhc26b13_mlp_cov_multipoint_256</td>
+      <td>mlp</td>
+      <td>1571.0000</td>
+      <td>1-p_signal</td>
+      <td>0.1062</td>
+      <td>0.8053</td>
+      <td>0.9324</td>
+      <td>0.9645</td>
+      <td>0.9811</td>
+      <td>0.9883</td>
+    </tr>
+    <tr>
+      <td>lhc26b13_mlp_cov_multipoint_256_kinematic</td>
+      <td>mlp</td>
+      <td>7728.0000</td>
+      <td>1-p_signal</td>
+      <td>0.2035</td>
+      <td>0.8450</td>
+      <td>0.9495</td>
+      <td>0.9784</td>
+      <td>0.9892</td>
+      <td>0.9940</td>
+    </tr>
+  </tbody>
+</table></section>
+    </section>
+  </div>
+  </div>
+</body>
+</html>
